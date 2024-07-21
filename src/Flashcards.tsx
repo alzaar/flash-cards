@@ -4,6 +4,10 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
+// Arrow Icons
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 const useStyles = makeStyles({
   cardContent: {
     display: "flex",
@@ -21,6 +25,8 @@ const Flashcards: React.FC = () => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Word of the Day
         </Typography>
+        <ArrowBackIosIcon />
+        <ArrowForwardIosIcon />
       </CardContent>
     </Card>
   );

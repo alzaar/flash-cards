@@ -2,7 +2,9 @@ import Container from "@mui/material/Container";
 import Flashcards from "./Flashcards";
 
 import { makeStyles } from "@material-ui/core/styles";
-
+import Form from "./Form";
+import Dialogue from "./Dialogue";
+import NavigationMenu from "./NavigationMenu";
 const useStyles = makeStyles({
   appContainer: {
     display: "flex !important",
@@ -19,7 +21,11 @@ export default function App() {
   return (
     <div>
       <Container className={classes.appContainer}>
+        <NavigationMenu />
         <Flashcards />
+        <Dialogue>
+          <Form />
+        </Dialogue>
       </Container>
     </div>
   );
