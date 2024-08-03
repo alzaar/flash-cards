@@ -1,29 +1,35 @@
-import { useForm, SubmitHandler } from "react-hook-form";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { FlashCard } from "./App";
+import TextField from "@mui/material/TextField";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-interface FormProps {
-  setOpen: (trigger: boolean) => void;
-  setFlashCards: (flashCards: any) => void;
-  flashCards: FlashCard[];
-}
+import { useFlashCardDispatch } from "../hooks/flashCardHooks";
+import { useModalStateDispatch } from "../hooks/modalHooks";
 
-export default function Form({
-  setOpen,
-  setFlashCards,
-  flashCards,
-}: FormProps) {
+let nextID = 0;
+
+export default function Form() {
+  const dispatch = useFlashCardDispatch();
+  const modelDispatch = useModalStateDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const newFlashCards = [...flashCards, data];
-    setFlashCards(newFlashCards);
-    setOpen(false);
+    dispatch({
+      type: "addFlashCard",
+      payload: {
+        id: (nextID++).toString(),
+        ...data,
+      },
+    });
+    modelDispatch({
+      type: "close",
+      payload: {
+        open: false,
+      },
+    });
   };
 
   return (

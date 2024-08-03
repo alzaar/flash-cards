@@ -1,16 +1,12 @@
-import { useState } from "react";
 import Container from "@mui/material/Container";
-import Flashcards from "./Flashcards";
-
 import { makeStyles } from "@material-ui/core/styles";
-import Form from "./Form";
-import Dialogue from "./Dialogue";
-import NavigationMenu from "./NavigationMenu";
 
-export type FlashCard = {
-  title: string;
-  details: string;
-};
+import Form from "./components/FlashCardForm";
+import Dialogue from "./components/Dialogue";
+import Flashcards from "./components/Flashcards";
+import NavigationMenu from "./components/NavigationMenu";
+import { ModalStateProvider } from "./contexts/ModalStateContext";
+import { FlashCardContextProvider } from "./contexts/FlashCardContext";
 
 const useStyles = makeStyles({
   appContainer: {
@@ -25,22 +21,18 @@ const useStyles = makeStyles({
 
 export default function App() {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [flashCards, setFlashCards] = useState([]);
 
   return (
-    <div>
-      <Container className={classes.appContainer}>
-        <NavigationMenu setOpen={setOpen} open={open} />
-        <Flashcards flashCards={flashCards} />
-        <Dialogue open={open} setOpen={setOpen}>
-          <Form
-            setOpen={setOpen}
-            setFlashCards={setFlashCards}
-            flashCards={flashCards}
-          />
-        </Dialogue>
-      </Container>
-    </div>
+    <FlashCardContextProvider>
+      <ModalStateProvider>
+        <Container className={classes.appContainer}>
+          <NavigationMenu />
+          <Flashcards />
+          <Dialogue>
+            <Form />
+          </Dialogue>
+        </Container>
+      </ModalStateProvider>
+    </FlashCardContextProvider>
   );
 }
