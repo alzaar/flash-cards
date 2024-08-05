@@ -14,3 +14,4 @@ Ended up working on a MVC version for the Flash Card App
 3. Deploy on netlify
 4. Make app responsive
 5. Add accessiblity 
+6. Switch to mui style hook
