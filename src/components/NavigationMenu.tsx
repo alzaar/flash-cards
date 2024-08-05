@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "60%",
+    width: "59.8%",
   },
 });
 
