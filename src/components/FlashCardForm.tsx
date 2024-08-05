@@ -3,27 +3,44 @@ import TextField from "@mui/material/TextField";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useFlashCardDispatch } from "../hooks/flashCardHooks";
-import { useModalStateDispatch } from "../hooks/modalHooks";
+import { useModalState, useModalStateDispatch } from "../hooks/modalHooks";
 
 let nextID = 0;
 
 export default function Form() {
   const dispatch = useFlashCardDispatch();
   const modelDispatch = useModalStateDispatch();
+  const { flashCard } = useModalState();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      title: flashCard?.title,
+      details: flashCard?.details,
+    },
+  });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch({
-      type: "addFlashCard",
-      payload: {
-        id: (nextID++).toString(),
-        ...data,
-      },
-    });
+    if (flashCard?.id) {
+      dispatch({
+        type: "editFlashCard",
+        payload: {
+          id: flashCard?.id,
+          ...data,
+        },
+      });
+    } else {
+      dispatch({
+        type: "addFlashCard",
+        payload: {
+          id: (nextID++).toString(),
+          ...data,
+        },
+      });
+    }
+
     modelDispatch({
       type: "close",
       payload: {
@@ -47,23 +64,46 @@ export default function Form() {
           id="standard-error-helper-text"
           label="Name of Flashcard"
           placeholder="Name"
-          helperText={errors.title ? "Incorrect entry." : ""}
+          helperText={errors.title ? errors.title.message : ""}
           variant="standard"
-          {...register("title", { required: "This field is required" })}
+          {...register("title", {
+            required: "This field is required",
+            minLength: {
+              value: 3,
+              message: "Title must be at least 3 characters",
+            },
+            maxLength: {
+              value: 20,
+              message: "Title cannot exceed 10 characters",
+            },
+          })}
           sx={{
             margin: 5,
+            width: "100%",
           }}
         />
         <TextField
           error={!!errors.details}
+          multiline
           id="standard-error-helper-text"
           label="Details of your flashcard"
           placeholder="Details"
-          helperText={errors.details ? "Incorrect entry." : ""}
+          helperText={errors.details ? errors.details.message : ""}
           variant="standard"
-          {...register("details", { required: "This field is required" })}
+          {...register("details", {
+            required: "This field is required",
+            minLength: {
+              value: 3,
+              message: "Details must be at least 10 characters",
+            },
+            maxLength: {
+              value: 180,
+              message: "Details cannot exceed 180 characters",
+            },
+          })}
           sx={{
-            margin: 5,
+            // margin: 5,
+            width: "100%", // Set the width
           }}
         />
         <Button

@@ -10,7 +10,8 @@ export type FlashCardContextProviderProps = {
 };
 export type FlashCardAction =
   | { type: "addFlashCard"; payload: FlashCard }
-  | { type: "deleteFlashCard"; payload: string };
+  | { type: "deleteFlashCard"; payload: string }
+  | { type: "editFlashCard"; payload: FlashCard };
 
 export type FlashCardDispatchContextType = Dispatch<FlashCardAction>;
 export type FlashCardContextType = FlashCard[];

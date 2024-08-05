@@ -1,34 +1,42 @@
-import "swiper/css";
+// import "swiper/css";
+import Slider from "react-slick";
 import { Fragment } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./slider-overrides.css";
 
 import FlashCard from "./FlashCard";
-import { useFlashCards, useFlashCardDispatch } from "../hooks/flashCardHooks";
+import { useFlashCards } from "../hooks/flashCardHooks";
+
+const settings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplaySpeed: 3000,
+  style: {
+    width: "50%",
+    minHeight: 200,
+  },
+  nextArrow: undefined,
+  prevArrow: undefined,
+};
 
 const Flashcards = () => {
   const flashCards = useFlashCards();
-  const dispatch = useFlashCardDispatch();
-  const deleteFlashCard = (id: string) =>
-    dispatch({
-      type: "deleteFlashCard",
-      payload: id,
-    });
 
   const cards = flashCards.map((flashCard) => {
     return (
       <Fragment key={flashCard.id}>
-        <SwiperSlide key={flashCard.id} style={{ padding: 20 }}>
-          <FlashCard {...flashCard} deleteFlashCard={deleteFlashCard} />
-        </SwiperSlide>
+        <FlashCard {...flashCard} />
       </Fragment>
     );
   });
 
   return (
     <>
-      <Swiper style={{ width: "50%" }} spaceBetween={100} slidesPerView={1}>
-        {cards}
-      </Swiper>
+      <Slider {...settings}>{cards}</Slider>
     </>
   );
 };

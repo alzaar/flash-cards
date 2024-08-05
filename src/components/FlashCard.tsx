@@ -1,42 +1,23 @@
 import Card from "@mui/material/Card";
-import { makeStyles } from "@mui/styles";
 import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { FlashCard as FlashCardType } from "../types/flashCardTypes";
+import { useModalStateDispatch } from "../hooks/modalHooks";
+import { useFlashCardDispatch } from "../hooks/flashCardHooks";
 
-const useStyles = makeStyles({
-  cardContent: {
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "flex-start",
-    // flexDirection: "column",
-    // // backgroundColor: "#1976d2",
-    // borderRadius: 5,
-    // boxShadow: "30px 5px 5px red",
-    // height: "70%",
-  },
-});
-
-type FlashCardProps = {
-  deleteFlashCard: (flashCardID: string) => void;
-} & FlashCardType;
-
-export default function FlashCard({
-  id,
-  title,
-  details,
-  deleteFlashCard,
-}: FlashCardProps) {
-  const classes = useStyles();
+export default function FlashCard({ id, title, details }: FlashCardType) {
+  const modalDispatch = useModalStateDispatch();
+  const flashCardDispatch = useFlashCardDispatch();
   return (
     <Card
       sx={{
         minHeight: "20vh",
-        boxShadow: "1px 2px 2px #D3D3D3",
+        boxShadow:
+          "0px 2px 2px #d3d3d3, 1px 2px #d3d3d3, 0px -52px -34px #d3d3d3",
         borderRadius: 2,
         width: "50%",
         margin: "auto",
@@ -45,23 +26,55 @@ export default function FlashCard({
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-start",
+          justifyContent: "space-between",
           flexDirection: "row",
         }}
       >
-        <IconButton onClick={() => deleteFlashCard(id)}>
-          <DeleteIcon />
-        </IconButton>
         <Typography
-          sx={{ fontSize: 19, marginTop: 2 }}
+          sx={{ fontSize: 19, marginTop: 2, marginLeft: 2 }}
           color="text.secondary"
           gutterBottom
         >
           {title}
         </Typography>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}
+        >
+          <IconButton
+            onClick={() =>
+              flashCardDispatch({
+                type: "deleteFlashCard",
+                payload: id,
+              })
+            }
+          >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            onClick={() =>
+              modalDispatch({
+                type: "open",
+                payload: {
+                  open: true,
+                  flashCard: { id, title, details },
+                },
+              })
+            }
+          >
+            <EditIcon />
+          </IconButton>
+        </div>
       </div>
-      <CardContent className={classes.cardContent}>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+      <CardContent>
+        <Typography
+          sx={{ fontSize: 14, overflowWrap: "break-word" }}
+          color="text.secondary"
+          gutterBottom
+        >
           {details}
         </Typography>
       </CardContent>
